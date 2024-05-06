@@ -1,6 +1,6 @@
-SET GLOBAL log_output = "FILE";
-SET GLOBAL general_log_file = "/var/log/mysqld.log";
-SET GLOBAL general_log = 'ON';
+-- SET GLOBAL log_output = 'FILE';
+-- SET GLOBAL general_log_file = '/var/log/mysqld.log';
+-- SET GLOBAL general_log = 'ON';
 
 -- DROP DATABASE IF EXISTS db_market;
 
@@ -89,3 +89,96 @@ VALUES
 	, (5, 3, 3, 5000, 10, 50000, NOW(), NOW())
 ;
 
+-- -- Initial Store Procedure (PL/SQL)
+-- -- Module Product
+-- DELIMITER //
+-- //
+-- CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetAll()
+-- BEGIN
+-- 	SELECT * FROM db_market.products;
+-- END
+-- //
+-- DELIMITER ;
+
+-- DELIMITER //
+-- //
+-- CREATE PROCEDURE IF NOT EXISTS db_market.GetProductById(IN _id INT)
+-- proc:BEGIN
+-- 	DECLARE product_count INT DEFAULT 0;
+	
+-- 	SELECT COUNT(1) INTO product_count
+-- 	FROM db_market.products
+-- 	WHERE product_id = _id;
+
+-- 	IF product_count = 0 THEN
+-- 		SELECT
+-- 			NOW() AS datetime
+-- 			, 404 AS code
+-- 			, 'Not found' AS status
+-- 			, 'Product tidak ditemukan!' AS message;
+-- 		LEAVE proc;
+--     END IF;
+
+--    SELECT
+-- 		product_id
+-- 		, name
+-- 		, price
+-- 		, stock
+-- 		, description
+-- 	FROM db_market.products
+-- 	WHERE product_id = _id;
+
+-- 	SELECT
+-- 		NOW() AS datetime
+-- 		, 200 AS code
+-- 		, 'OK' AS status
+-- 		, 'OK' AS message;
+-- END
+-- //
+-- DELIMITER ;
+
+-- -- DELIMITER //
+-- -- //
+-- CREATE PROCEDURE IF NOT EXISTS db_market.GetProductByName(IN _name VARCHAR(45))
+-- BEGIN
+-- 	DECLARE product_count INT DEFAULT 0;
+	
+-- 	SELECT COUNT(1) INTO product_count
+-- 	FROM db_market.products
+-- 	WHERE name = _name;
+
+-- 	IF product_count = 0 THEN
+-- 		SIGNAL SQLSTATE '45000'
+-- 		SET MESSAGE_TEXT = 'Product tidak ditemukan';
+--     END IF;
+
+-- 	SELECT
+-- 		product_id
+-- 		, name
+-- 		, price
+-- 		, stock
+-- 		, description
+-- 	FROM db_market.products
+-- 	WHERE name = _name;
+-- END
+-- -- //
+-- -- DELIMITER ;
+
+-- -- DELIMITER //
+-- -- //
+-- CREATE PROCEDURE IF NOT EXISTS db_market.InsertOneProduct(IN _name VARCHAR(45))
+-- BEGIN
+-- 	DECLARE product_count INT DEFAULT 0;
+	
+-- 	SELECT COUNT(1) INTO product_count
+-- 	FROM db_market.products
+-- 	WHERE name = _name;
+
+-- 	IF product_count = 0 THEN
+-- 		SIGNAL SQLSTATE '45000'
+-- 		SET MESSAGE_TEXT = 'Product tidak ditemukan';
+--     END IF;
+
+-- END
+-- -- //
+-- -- DELIMITER ;

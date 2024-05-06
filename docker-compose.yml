@@ -12,5 +12,5 @@ services:
       - "3300:3306"
     volumes:
       - ./import:/docker-entrypoint-initdb.d
-      # - ./mysql-log:/var/log/mysql
+      # - ./mysql-log:/var/log/mysqld.log
     # restart: always

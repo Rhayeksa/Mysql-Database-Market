@@ -18,6 +18,20 @@ Mysql Database Market merupakan project penyimpanan basis data untuk Toko secara
 docker-compose up -d
 ```
 
+- (Opsional) Jalankan perintah berikut untuk mengaktifkan pencatatan log
+
+```console
+docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL log_output = 'FILE';" \
+&& docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL general_log_file = '/var/log/mysqld.log';" \
+&& docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL general_log = 'ON';"
+```
+
+- (Opsional) Untuk melihat log jalankan perintah berikut
+
+```console
+docker exec -t mysql_database_market cat /var/log/mysqld.log
+```
+
 ## Penggunaan Store Procedure
 
 ### Module Products
