@@ -1,0 +1,15 @@
+version: "3"
+services:
+  db:
+    container_name: mysql_database_market
+    image: mysql:8.3.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      # MYSQL_DATABASE: database
+      - TZ=Asia/Jakarta
+    ports:
+      - "3300:3306"
+    # volumes:
+    #   - ./import:/docker-entrypoint-initdb.d
+    # restart: always
