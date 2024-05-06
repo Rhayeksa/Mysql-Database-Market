@@ -1,4 +1,8 @@
-DROP DATABASE IF EXISTS db_market;
+SET GLOBAL log_output = "FILE";
+SET GLOBAL general_log_file = "/var/log/mysqld.log";
+SET GLOBAL general_log = 'ON';
+
+-- DROP DATABASE IF EXISTS db_market;
 
 -- Initial Database
 CREATE DATABASE IF NOT EXISTS db_market;
