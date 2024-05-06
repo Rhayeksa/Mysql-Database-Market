@@ -10,6 +10,7 @@ services:
       - TZ=Asia/Jakarta
     ports:
       - "3300:3306"
-    # volumes:
-    #   - ./import:/docker-entrypoint-initdb.d
+    volumes:
+      - ./import:/docker-entrypoint-initdb.d
+      # - ./mysql-log:/var/log/mysql
     # restart: always
