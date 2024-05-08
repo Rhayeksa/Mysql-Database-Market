@@ -1,8 +1,4 @@
--- SET GLOBAL log_output = 'FILE';
--- SET GLOBAL general_log_file = '/var/log/mysqld.log';
--- SET GLOBAL general_log = 'ON';
-
--- DROP DATABASE IF EXISTS db_market;
+DROP DATABASE IF EXISTS db_market;
 
 -- Initial Database
 CREATE DATABASE IF NOT EXISTS db_market;
@@ -89,53 +85,104 @@ VALUES
 	, (5, 3, 3, 5000, 10, 50000, NOW(), NOW())
 ;
 
--- -- Initial Store Procedure (PL/SQL)
--- -- Module Product
--- DELIMITER //
--- //
--- CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetAll()
--- BEGIN
--- 	SELECT * FROM db_market.products;
--- END
--- //
--- DELIMITER ;
+-- Initial Store Procedure (PL/SQL)
+-- Module Product
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetAll(
+	IN _size INT
+	, IN _page INT
+)
+proc:BEGIN
+	-- variabel
+	DECLARE v_offset INT;
+	DECLARE v_total_data INT;
 
--- DELIMITER //
--- //
--- CREATE PROCEDURE IF NOT EXISTS db_market.GetProductById(IN _id INT)
--- proc:BEGIN
--- 	DECLARE product_count INT DEFAULT 0;
+	SET _size = IFNULL(_size, 10);
+	SET _page = IFNULL(_page, 1);
+
+	-- validasi
+	IF _size <= 0 OR _page <= 0 THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad Request' AS status
+			, 'Parameter Size dan Page tidak boleh kurang dari 1' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
+
+	-- code
+	SELECT
+		NOW() AS datetime
+		, 200 AS code
+		, 'OK' AS status
+		, 'OK' AS message;
+
+	SET v_offset = (_page - 1) * _size;
+	SELECT
+		product_id
+		, name
+		, price
+		, stock
+		, description
+	FROM db_market.products
+	WHERE deleted_at IS NULL
+	LIMIT _size
+	OFFSET v_offset;
+
+	SET v_total_data = (SELECT COUNT(1) FROM db_market.products);
+	SELECT
+		_size AS page_size
+		, v_total_data AS total_data
+		, ROUND(v_total_data / _size) AS total_page
+		, _page AS current_page;
+
+	COMMIT;
+END //
+-- END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetById(IN _id INT)
+proc:BEGIN
+	-- variabel
+	DECLARE v_count INT DEFAULT 0;
 	
--- 	SELECT COUNT(1) INTO product_count
--- 	FROM db_market.products
--- 	WHERE product_id = _id;
+	-- validasi
+	SELECT COUNT(1) INTO v_count
+	FROM db_market.products
+	WHERE product_id = _id;
 
--- 	IF product_count = 0 THEN
--- 		SELECT
--- 			NOW() AS datetime
--- 			, 404 AS code
--- 			, 'Not found' AS status
--- 			, 'Product tidak ditemukan!' AS message;
--- 		LEAVE proc;
---     END IF;
+	IF v_count < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 404 AS code
+			, 'Not found' AS status
+			, 'Product tidak ditemukan!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+    END IF;
 
---    SELECT
--- 		product_id
--- 		, name
--- 		, price
--- 		, stock
--- 		, description
--- 	FROM db_market.products
--- 	WHERE product_id = _id;
+	-- code
+	SELECT
+		NOW() AS datetime
+		, 200 AS code
+		, 'OK' AS status
+		, 'OK' AS message;
+   
+   SELECT
+		product_id
+		, name
+		, price
+		, stock
+		, description
+	FROM db_market.products
+	WHERE deleted_at IS NULL
+	AND product_id = _id;
 
--- 	SELECT
--- 		NOW() AS datetime
--- 		, 200 AS code
--- 		, 'OK' AS status
--- 		, 'OK' AS message;
--- END
--- //
--- DELIMITER ;
+	COMMIT;
+END //
+DELIMITER ;
 
 -- -- DELIMITER //
 -- -- //
