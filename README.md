@@ -10,7 +10,7 @@ Mysql Database Market merupakan project penyimpanan basis data untuk Toko secara
 
 ### Menggunakan Docker Compose
 
-- Buka terminal
+- Buka docker CLI
 - Sesuaikan direktori
 - Jalankan perintah berikut
 
@@ -21,9 +21,9 @@ docker-compose up -d
 - (Opsional) Jalankan perintah berikut untuk mengaktifkan pencatatan log
 
 ```console
-docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL log_output = 'FILE';" \
-&& docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL general_log_file = '/var/log/mysqld.log';" \
-&& docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL general_log = 'ON';"
+docker exec -t mysql_database_market docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL log_output = 'FILE';" \
+&& docker exec -t mysql_database_market docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL general_log_file = '/var/log/mysqld.log';" \
+&& docker exec -t mysql_database_market docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL general_log = 'ON';"
 ```
 
 - (Opsional) Untuk melihat log jalankan perintah berikut
@@ -42,15 +42,15 @@ docker exec -t mysql_database_market cat /var/log/mysqld.log
 
 ```sql
 CALL db_market.ProductGetAll(
-  :_size -- => [NULL || 10]
-  , :_page -- => [NULL || 1]
+  :_size -- => (INT) [NULL || 10]
+  , :_page -- => (INT) [NULL || 1]
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.ProductGetAll(:_size, :_page)"
+docker exec -t mysql_database_market docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetAll(:_size, :_page)"
 ```
 
 #### Product Get By Id (building)
@@ -59,14 +59,14 @@ mysql --user=root --password=root --execute="CALL db_market.ProductGetAll(:_size
 
 ```sql
 CALL db_market.ProductGetById(
-  :_id -- => [1]
+  :_id -- => (INT) [1]
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.ProductGetById(:_id)"
+docker exec -t mysql_database_market docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetById(:_id)"
 ```
 
 #### Product Get By Name (building)
@@ -75,14 +75,14 @@ mysql --user=root --password=root --execute="CALL db_market.ProductGetById(:_id)
 
 ```sql
 CALL db_market.ProductGetByName(
-  :_name -- => ['Product 1']
+  :_name -- => (STRING) ['Product 1']
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.ProductGetByName(:_name)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetByName(:_name)"
 ```
 
 #### Product Get By Like Name (building)
@@ -97,10 +97,10 @@ CALL db_market.ProductGetByLikeName(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.ProductGetByLikeName(:_name, :_size, :_page)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetByLikeName(:_name, :_size, :_page)"
 ```
 
 #### Product Get Empty Stock (building)
@@ -114,10 +114,10 @@ CALL db_market.ProductGetEmptyStock(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.ProductGetEmptyStock(:_size, :_page)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetEmptyStock(:_size, :_page)"
 ```
 
 #### Product Add One (building)
@@ -134,10 +134,10 @@ CALL db_market.ProductAddOne(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.ProductGetEmptyStock(:_id, :_name, :_price, :_qty, :_description)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetEmptyStock(:_id, :_name, :_price, :_qty, :_description)"
 ```
 
 #### Product Edit One By Id (building)
@@ -154,10 +154,10 @@ CALL db_market.ProductEditOneById(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.ProductEditOneById(:_id, :_name, :_price, :_qty, :_description)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductEditOneById(:_id, :_name, :_price, :_qty, :_description)"
 ```
 
 #### Product Delete One By Id (building)
@@ -170,10 +170,10 @@ CALL db_market.ProductDeleteOneById(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.ProductDeleteOneById(:_id)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductDeleteOneById(:_id)"
 ```
 
 ### Module Customers
@@ -189,10 +189,10 @@ CALL db_market.CustomerGetAll(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.CustomerGetAll(:_size, :_page)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerGetAll(:_size, :_page)"
 ```
 
 #### Customer Get By Id (building)
@@ -205,10 +205,10 @@ CALL db_market.CustomerGetById(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.CustomerGetById(:_id)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerGetById(:_id)"
 ```
 
 #### Customer Get By Name (building)
@@ -221,10 +221,10 @@ CALL db_market.CustomerGetByName(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.CustomerGetByName(:_name)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerGetByName(:_name)"
 ```
 
 #### Customer Get By Like Name (building)
@@ -239,10 +239,10 @@ CALL db_market.CustomerGetByLikeName(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.CustomerGetByLikeName(:_name, :_size, :_page)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerGetByLikeName(:_name, :_size, :_page)"
 ```
 
 #### Customer Get By Gender (building)
@@ -257,10 +257,10 @@ CALL db_market.CustomerGetByGender(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.CustomerGetByGender(:_name, :_size, :_page)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerGetByGender(:_name, :_size, :_page)"
 ```
 
 #### Customer Add One (building)
@@ -276,10 +276,10 @@ CALL db_market.CustomerAddOne(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.CustomerAddOne(:_name, :_gender, :_address, :_is_member)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerAddOne(:_name, :_gender, :_address, :_is_member)"
 ```
 
 #### Customer Edit One By Id (building)
@@ -296,10 +296,10 @@ CALL db_market.CustomerEditOneById(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.CustomerEditOneById(:id, :_name, :_gender, :_address, :_is_member)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerEditOneById(:id, :_name, :_gender, :_address, :_is_member)"
 ```
 
 #### Customer Delete One By Id (building)
@@ -312,10 +312,10 @@ CALL db_market.CustomerDeleteOneById(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.CustomerDeleteOneById(:_id)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerDeleteOneById(:_id)"
 ```
 
 ### Module Customer Order
@@ -330,10 +330,10 @@ CALL db_market.CustomerOrderGetByCustomerOrderId(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.CustomerOrderGetByCustomerOrderId(:_id)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerOrderGetByCustomerOrderId(:_id)"
 ```
 
 #### Customer Order Get By Customer Id (building)
@@ -347,10 +347,10 @@ CALL db_market.CustomerOrderGetByCustomerId(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.CustomerOrderGetByCustomerId(:_id, :_trans_n)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerOrderGetByCustomerId(:_id, :_trans_n)"
 ```
 
 #### Customer Order Add One (building)
@@ -364,10 +364,10 @@ CALL db_market.CustomerOrderAddOne(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.CustomerOrderAddOne(:_customer_id, _product_id_qty_arr_json)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerOrderAddOne(:_customer_id, _product_id_qty_arr_json)"
 ```
 
 #### Customer Order Delete By Customer Order Id (building)
@@ -380,8 +380,8 @@ CALL db_market.CustomerOrderDeleteByCustomerOrderId(
 );
 ```
 
-- Menggunakan Terminal
+- Menggunakan docker CLI
 
 ```console
-mysql --user=root --password=root --execute="CALL db_market.CustomerOrderDeleteByCustomerOrderId(:_id)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerOrderDeleteByCustomerOrderId(:_id)"
 ```
