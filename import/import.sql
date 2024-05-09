@@ -352,3 +352,56 @@ proc:BEGIN
 END //
 DELIMITER ;
 
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.ProductAddOne(
+	IN _name VARCHAR(45)
+	, IN _price INT
+	, IN _qty INT
+	, IN _description TEXT
+)
+proc:BEGIN
+	-- variabel	
+	DECLARE v_checker INT DEFAULT 0;
+	
+	-- code
+	SELECT COUNT(1) INTO v_checker
+	FROM db_market.products
+	WHERE name = _name
+	AND deleted_at IS NULL;
+
+	IF v_checker > 0 THEN
+		SELECT
+			NOW() AS datetime
+			, 409 AS code
+			, 'Conflict' AS status
+			, 'Produk dengan nama tersebut sudah ada!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+    END IF;
+   
+	IF _price < 1 OR _qty < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad request' AS status
+			, 'Price dan Qty tidak boleh kurang dari 1!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
+
+	INSERT INTO db_market.products(name, price, stock, description, created_at, updated_at)
+	VALUES(_name, _price, _qty, _description, NOW(), NOW());
+
+	SELECT
+		NOW() AS datetime
+		, 201 AS code
+		, 'Created' AS status
+		, 'Produk berhasil di tambah!' AS message;
+
+	COMMIT;
+END //
+DELIMITER ;
+
+DELIMITER //
+
+DELIMITER ;
