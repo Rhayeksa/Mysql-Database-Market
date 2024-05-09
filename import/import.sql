@@ -155,7 +155,8 @@ proc:BEGIN
 	-- code
 	SELECT COUNT(1) INTO v_count
 	FROM db_market.products
-	WHERE product_id = _id;
+	WHERE product_id = _id
+	AND deleted_at IS NULL;
 
 	IF v_count < 1 THEN
 		SELECT
