@@ -406,5 +406,54 @@ END //
 DELIMITER ;
 
 DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.ProductAddStockById(
+	IN _id INT
+	, IN _qty INT
+)
+proc:BEGIN
+	-- variabel
+	DECLARE v_checker INT DEFAULT 0;
+	DECLARE v_stock INT;
+	
+	-- code
+	IF _qty < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad request' AS status
+			, 'Qty tidak boleh kurang dari 1!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
 
+	SELECT COUNT(1) INTO v_checker
+	FROM db_market.products
+	WHERE product_id = _id
+	AND deleted_at IS NULL;
+
+	IF v_checker < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 404 AS code
+			, 'Not found' AS status
+			, 'Produk dengan id tersebut tidak ditemukan!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+    END IF;
+   
+   SET v_stock = _qty + (SELECT stock FROM db_market.products WHERE product_id = _id);
+   
+   UPDATE db_market.products
+   SET stock = v_stock
+   	   , updated_at = NOW()
+   WHERE product_id = _id;
+
+	SELECT
+		NOW() AS datetime
+		, 200 AS code
+		, 'OK' AS status
+		, 'Stok berhasil ditambahkan!' AS message;
+
+	COMMIT;
+END //
 DELIMITER ;
