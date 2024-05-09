@@ -143,7 +143,6 @@ proc:BEGIN
 
 	COMMIT;
 END //
--- END //
 DELIMITER ;
 
 DELIMITER //
