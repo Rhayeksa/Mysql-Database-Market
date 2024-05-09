@@ -150,15 +150,15 @@ DELIMITER //
 CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetById(IN _id INT)
 proc:BEGIN
 	-- variabel
-	DECLARE v_count INT DEFAULT 0;
+	DECLARE v_checker INT DEFAULT 0;
 	
 	-- code
-	SELECT COUNT(1) INTO v_count
+	SELECT COUNT(1) INTO v_checker
 	FROM db_market.products
 	WHERE product_id = _id
 	AND deleted_at IS NULL;
 
-	IF v_count < 1 THEN
+	IF v_checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
@@ -191,14 +191,14 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetByName(IN _name VARCHAR(45))
 proc:BEGIN
-	DECLARE v_count INT DEFAULT 0;
+	DECLARE v_checker INT DEFAULT 0;
 	
 	-- code
-	SELECT COUNT(1) INTO v_count
+	SELECT COUNT(1) INTO v_checker
 	FROM db_market.products
 	WHERE name = _name;
 
-	IF v_count < 1 THEN
+	IF v_checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
