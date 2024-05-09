@@ -108,11 +108,23 @@ proc:BEGIN
 		LEAVE proc;
 	END IF;
 
-	SELECT
-		NOW() AS datetime
-		, 200 AS code
-		, 'OK' AS status
-		, 'OK' AS message;
+	SELECT COUNT(1) INTO v_total_data
+	FROM db_market.products
+	WHERE deleted_at IS NULL
+
+	IF v_total_data < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 204 AS code
+			, 'No Content' AS status
+			, 'No Content' AS message;
+	ELSE
+		SELECT
+			NOW() AS datetime
+			, 200 AS code
+			, 'OK' AS status
+			, 'OK' AS message;		
+	END IF;
 
 	SET _size = IFNULL(_size, 10);
 	SET _page = IFNULL(_page, 1);
@@ -128,12 +140,6 @@ proc:BEGIN
 	WHERE deleted_at IS NULL
 	LIMIT _size
 	OFFSET v_offset;
-
-	SET v_total_data = (
-		SELECT COUNT(1)
-		FROM db_market.products
-		WHERE deleted_at IS NULL
-	);
 
 	SELECT
 		_size AS page_size
