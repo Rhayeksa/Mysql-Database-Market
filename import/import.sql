@@ -367,6 +367,16 @@ proc:BEGIN
 	DECLARE v_checker INT DEFAULT 0;
 	
 	-- code
+	IF _price < 1 OR _qty < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad request' AS status
+			, 'Price dan Qty tidak boleh kurang dari 1!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
+
 	SELECT COUNT(1) INTO v_checker
 	FROM db_market.products
 	WHERE name = _name
@@ -380,18 +390,8 @@ proc:BEGIN
 			, 'Produk dengan nama tersebut sudah ada!' AS message;
 		ROLLBACK;
 		LEAVE proc;
-    END IF;
-   
-	IF _price < 1 OR _qty < 1 THEN
-		SELECT
-			NOW() AS datetime
-			, 400 AS code
-			, 'Bad request' AS status
-			, 'Price dan Qty tidak boleh kurang dari 1!' AS message;
-		ROLLBACK;
-		LEAVE proc;
-	END IF;
-
+		END IF;
+		
 	INSERT INTO db_market.products(name, price, stock, description, created_at, updated_at)
 	VALUES(_name, _price, _qty, _description, NOW(), NOW());
 
