@@ -139,14 +139,14 @@ CALL db_market.ProductAddOne(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetEmptyStock(:_id, :_name, :_price, :_qty, :_description)"
 ```
 
-#### Product Add Stock By Id (building)
+#### Product Add Stock By Id
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.ProductAddStockById(
-  :_id -- => [1]
-  , :_qty  -- => [15]
+  :_id -- => INT [1]
+  , :_qty  -- => INT [15]
 );
 ```
 
