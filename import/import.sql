@@ -6,7 +6,7 @@ CREATE DATABASE IF NOT EXISTS db_market;
 -- Initial Tables
 CREATE TABLE IF NOT EXISTS db_market.products(
   	product_id INT AUTO_INCREMENT UNIQUE NOT NULL
-  	, name VARCHAR(45) NOT NULL
+  	, name VARCHAR(45) NOT NULL UNIQUE
   	, price INT NOT NULL
   	, stock INT NOT NULL
   	, description TEXT
