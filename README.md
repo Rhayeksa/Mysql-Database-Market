@@ -21,9 +21,9 @@ docker-compose up -d
 - (Opsional) Jalankan perintah berikut untuk mengaktifkan pencatatan log
 
 ```console
-docker exec -t mysql_database_market docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL log_output = 'FILE';" \
-&& docker exec -t mysql_database_market docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL general_log_file = '/var/log/mysqld.log';" \
-&& docker exec -t mysql_database_market docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL general_log = 'ON';"
+docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL log_output = 'FILE'" \
+&& docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL general_log_file = '/var/log/mysqld.log'" \
+&& docker exec -t mysql_database_market mysql --user="root" --password="root" --execute="SET GLOBAL general_log = 'ON'"
 ```
 
 - (Opsional) Untuk melihat log jalankan perintah berikut
@@ -36,14 +36,14 @@ docker exec -t mysql_database_market cat /var/log/mysqld.log
 
 ### Module Products
 
-#### Product Get All (building)
+#### Product Get All
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.ProductGetAll(
-  :_size -- => (INT) [NULL || 10]
-  , :_page -- => (INT) [NULL || 1]
+  :_size -- => INT [NULL || 10]
+  , :_page -- => INT [NULL || 1]
 );
 ```
 
@@ -53,13 +53,13 @@ CALL db_market.ProductGetAll(
 docker exec -t mysql_database_market docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetAll(:_size, :_page)"
 ```
 
-#### Product Get By Id (building)
+#### Product Get By Id
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.ProductGetById(
-  :_id -- => (INT) [1]
+  :_id -- => INT [1]
 );
 ```
 
@@ -69,13 +69,13 @@ CALL db_market.ProductGetById(
 docker exec -t mysql_database_market docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetById(:_id)"
 ```
 
-#### Product Get By Name (building)
+#### Product Get By Name
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.ProductGetByName(
-  :_name -- => (STRING) ['Product 1']
+  :_name -- => VARCHAR(45) ['Product 1']
 );
 ```
 
@@ -85,15 +85,15 @@ CALL db_market.ProductGetByName(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetByName(:_name)"
 ```
 
-#### Product Get By Like Name (building)
+#### Product Get By Like Name
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.ProductGetByLikeName(
-  :_name -- => ['Product']
-  , :_size -- => [NULL || 10]
-  , :_page -- => [NULL || 1]
+  :_name -- => VARCHAR(45) ['Product']
+  , :_size -- => INT [NULL || 10]
+  , :_page -- => INT [NULL || 1]
 );
 ```
 
@@ -103,7 +103,7 @@ CALL db_market.ProductGetByLikeName(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetByLikeName(:_name, :_size, :_page)"
 ```
 
-#### Product Get Empty Stock (building)
+#### Product Get Empty Stock
 
 - Menggunakan Aplikasi GUI
 

@@ -97,10 +97,7 @@ proc:BEGIN
 	DECLARE v_offset INT;
 	DECLARE v_total_data INT;
 
-	SET _size = IFNULL(_size, 10);
-	SET _page = IFNULL(_page, 1);
-
-	-- validasi
+	-- code
 	IF _size <= 0 OR _page <= 0 THEN
 		SELECT
 			NOW() AS datetime
@@ -111,14 +108,16 @@ proc:BEGIN
 		LEAVE proc;
 	END IF;
 
-	-- code
 	SELECT
 		NOW() AS datetime
 		, 200 AS code
 		, 'OK' AS status
 		, 'OK' AS message;
 
+	SET _size = IFNULL(_size, 10);
+	SET _page = IFNULL(_page, 1);
 	SET v_offset = (_page - 1) * _size;
+
 	SELECT
 		product_id
 		, name
@@ -130,11 +129,16 @@ proc:BEGIN
 	LIMIT _size
 	OFFSET v_offset;
 
-	SET v_total_data = (SELECT COUNT(1) FROM db_market.products);
+	SET v_total_data = (
+		SELECT COUNT(1)
+		FROM db_market.products
+		WHERE deleted_at IS NULL
+	);
+
 	SELECT
 		_size AS page_size
 		, v_total_data AS total_data
-		, ROUND(v_total_data / _size) AS total_page
+		, CEIL(v_total_data / _size) AS total_page
 		, _page AS current_page;
 
 	COMMIT;
@@ -148,7 +152,7 @@ proc:BEGIN
 	-- variabel
 	DECLARE v_count INT DEFAULT 0;
 	
-	-- validasi
+	-- code
 	SELECT COUNT(1) INTO v_count
 	FROM db_market.products
 	WHERE product_id = _id;
@@ -163,7 +167,6 @@ proc:BEGIN
 		LEAVE proc;
     END IF;
 
-	-- code
 	SELECT
 		NOW() AS datetime
 		, 200 AS code
@@ -184,48 +187,162 @@ proc:BEGIN
 END //
 DELIMITER ;
 
--- -- DELIMITER //
--- -- //
--- CREATE PROCEDURE IF NOT EXISTS db_market.GetProductByName(IN _name VARCHAR(45))
--- BEGIN
--- 	DECLARE product_count INT DEFAULT 0;
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetByName(IN _name VARCHAR(45))
+proc:BEGIN
+	DECLARE v_count INT DEFAULT 0;
 	
--- 	SELECT COUNT(1) INTO product_count
--- 	FROM db_market.products
--- 	WHERE name = _name;
+	-- code
+	SELECT COUNT(1) INTO v_count
+	FROM db_market.products
+	WHERE name = _name;
 
--- 	IF product_count = 0 THEN
--- 		SIGNAL SQLSTATE '45000'
--- 		SET MESSAGE_TEXT = 'Product tidak ditemukan';
---     END IF;
+	IF v_count < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 404 AS code
+			, 'Not found' AS status
+			, 'Product tidak ditemukan!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+    END IF;
 
--- 	SELECT
--- 		product_id
--- 		, name
--- 		, price
--- 		, stock
--- 		, description
--- 	FROM db_market.products
--- 	WHERE name = _name;
--- END
--- -- //
--- -- DELIMITER ;
+	SELECT
+		NOW() AS datetime
+		, 200 AS code
+		, 'OK' AS status
+		, 'OK' AS message;
+   
+   SELECT
+		product_id
+		, name
+		, price
+		, stock
+		, description
+	FROM db_market.products
+	WHERE deleted_at IS NULL
+	AND name = _name;
 
--- -- DELIMITER //
--- -- //
--- CREATE PROCEDURE IF NOT EXISTS db_market.InsertOneProduct(IN _name VARCHAR(45))
--- BEGIN
--- 	DECLARE product_count INT DEFAULT 0;
+	COMMIT;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetByLikeName(
+	IN _name VARCHAR(45)
+	, IN _size INT
+	, IN _page INT
+)
+proc:BEGIN
+	-- variabel	
+	DECLARE v_offset INT;
+	DECLARE v_total_data INT;
+	DECLARE v_total_page INT;
 	
--- 	SELECT COUNT(1) INTO product_count
--- 	FROM db_market.products
--- 	WHERE name = _name;
+	-- code
+	SET v_total_data = (
+		SELECT COUNT(1)
+		FROM db_market.products
+		WHERE deleted_at IS NULL
+		AND name LIKE CONCAT('%', _name , '%')
+	);
 
--- 	IF product_count = 0 THEN
--- 		SIGNAL SQLSTATE '45000'
--- 		SET MESSAGE_TEXT = 'Product tidak ditemukan';
---     END IF;
+	IF v_total_data < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 204 AS code
+			, 'No Content' AS status
+			, 'No Content' AS message;
+	ELSE
+		SELECT
+			NOW() AS datetime
+			, 200 AS code
+			, 'OK' AS status
+			, 'OK' AS message;		
+	END IF;
 
--- END
--- -- //
--- -- DELIMITER ;
+	SET _size = IFNULL(_size, 10);
+	SET _page = IFNULL(_page, 1);
+	SET v_offset = (_page - 1) * _size;
+   
+   SELECT
+		product_id
+		, name
+		, price
+		, stock
+		, description
+	FROM db_market.products
+	WHERE deleted_at IS NULL
+	AND name LIKE CONCAT('%', _name , '%')
+	LIMIT _size
+	OFFSET v_offset;
+
+	SELECT
+		_size AS page_size
+		, v_total_data AS total_data
+		, CEIL(v_total_data / _size) AS total_page
+		, _page AS current_page;
+
+	COMMIT;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetEmptyStock(
+	IN _size INT
+	, IN _page INT
+)
+proc:BEGIN
+	-- variabel	
+	DECLARE v_offset INT;
+	DECLARE v_total_data INT;
+	DECLARE v_total_page INT;
+	
+	-- code
+	SET v_total_data = (
+		SELECT COUNT(1)
+		FROM db_market.products
+		WHERE deleted_at IS NULL
+		AND stock < 1
+	);
+
+	IF v_total_data < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 204 AS code
+			, 'No Content' AS status
+			, 'No Content' AS message;
+	ELSE
+		SELECT
+			NOW() AS datetime
+			, 200 AS code
+			, 'OK' AS status
+			, 'OK' AS message;		
+    END IF;
+
+	SET _size = IFNULL(_size, 10);
+	SET _page = IFNULL(_page, 1);
+	SET v_offset = (_page - 1) * _size;
+
+   SELECT
+		product_id
+		, name
+		, price
+		, stock
+		, description
+	FROM db_market.products
+	WHERE deleted_at IS NULL
+	AND stock < 1
+	LIMIT _size
+	OFFSET v_offset;
+
+	SELECT
+		_size AS page_size
+		, v_total_data AS total_data
+		, CEIL(v_total_data / _size) AS total_page
+		, _page AS current_page;
+
+	COMMIT;
+END //
+DELIMITER ;
+
