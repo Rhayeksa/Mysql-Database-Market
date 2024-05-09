@@ -168,7 +168,7 @@ proc:BEGIN
 			, 'Product dengan id tersebut tidak ditemukan!' AS message;
 		ROLLBACK;
 		LEAVE proc;
-    END IF;
+	END IF;
 
 	SELECT
 		NOW() AS datetime
