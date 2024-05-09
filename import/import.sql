@@ -147,7 +147,9 @@ END //
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetById(IN _id INT)
+CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetById(
+	IN _id INT
+)
 proc:BEGIN
 	-- variabel
 	DECLARE v_checker INT DEFAULT 0;
@@ -189,7 +191,9 @@ END //
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetByName(IN _name VARCHAR(45))
+CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetByName(
+	IN _name VARCHAR(45)
+)
 proc:BEGIN
 	DECLARE v_checker INT DEFAULT 0;
 	
