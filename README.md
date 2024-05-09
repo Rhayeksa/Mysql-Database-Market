@@ -120,17 +120,16 @@ CALL db_market.ProductGetEmptyStock(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetEmptyStock(:_size, :_page)"
 ```
 
-#### Product Add One (building)
+#### Product Add One
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.ProductAddOne(
-  :_id -- => [0] jika insert product baru || [id yang sudah ada] untuk tambah stock product yang sudah ada
-  , :_name -- => ['Product 1'] untuk insert product baru. [NULL] jika tambah stock product
-  , :_price -- => [35000] untuk insert product baru. [NULL] jika tambah stock product
-  , :_qty-- => [15]
-  , :_description --[NULL || 'description']
+  :_name -- => VARCHAR(45) ['Product 1']
+  , :_price -- => INT [35000]
+  , :_qty-- => INT [15]
+  , :_description --TEXT [NULL || 'Description 1']
 );
 ```
 
@@ -138,6 +137,23 @@ CALL db_market.ProductAddOne(
 
 ```console
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductGetEmptyStock(:_id, :_name, :_price, :_qty, :_description)"
+```
+
+#### Product Add Stock By Id (building)
+
+- Menggunakan Aplikasi GUI
+
+```sql
+CALL db_market.ProductAddStockById(
+  :_id -- => [1]
+  , :_qty  -- => [15]
+);
+```
+
+- Menggunakan docker CLI
+
+```console
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductAddStockById(:_id, :_name, :_price, :_qty, :_description)"
 ```
 
 #### Product Edit One By Id (building)
