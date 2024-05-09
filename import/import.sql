@@ -165,7 +165,7 @@ proc:BEGIN
 			NOW() AS datetime
 			, 404 AS code
 			, 'Not found' AS status
-			, 'Product tidak ditemukan!' AS message;
+			, 'Product dengan id tersebut tidak ditemukan!' AS message;
 		ROLLBACK;
 		LEAVE proc;
     END IF;
