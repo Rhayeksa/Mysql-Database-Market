@@ -196,7 +196,8 @@ proc:BEGIN
 	-- code
 	SELECT COUNT(1) INTO v_checker
 	FROM db_market.products
-	WHERE name = _name;
+	WHERE name = _name
+	AND deleted_at IS NULL;
 
 	IF v_checker < 1 THEN
 		SELECT
