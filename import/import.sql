@@ -246,12 +246,10 @@ proc:BEGIN
 	DECLARE v_total_page INT;
 	
 	-- code
-	SET v_total_data = (
-		SELECT COUNT(1)
-		FROM db_market.products
-		WHERE deleted_at IS NULL
-		AND name LIKE CONCAT('%', _name , '%')
-	);
+	SELECT COUNT(1) INTO v_total_data
+	FROM db_market.products
+	WHERE deleted_at IS NULL
+	AND name LIKE CONCAT('%', _name , '%')
 
 	IF v_total_data < 1 THEN
 		SELECT
