@@ -343,6 +343,7 @@ proc:BEGIN
 	FROM db_market.products
 	WHERE deleted_at IS NULL
 	AND stock < 1
+	ORDER BY name ASC
 	LIMIT _size
 	OFFSET v_offset;
 
