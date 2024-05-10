@@ -827,7 +827,7 @@ proc:BEGIN
 	DECLARE v_total_page INT;
 	
 	-- code
-	IF _gender != 'Pria' AND _gender != 'Wanita' THEN
+	IF _gender NOT IN('Pria', 'Wanita') THEN
 		SELECT
 			NOW() AS datetime
 			, 400 AS code
