@@ -206,8 +206,8 @@ proc:BEGIN
 	-- code
 	SELECT COUNT(1) INTO v_checker
 	FROM db_market.products
-	WHERE name = _name
-	AND deleted_at IS NULL;
+	WHERE deleted_at IS NULL
+	AND name = _name;
 
 	IF v_checker < 1 THEN
 		SELECT
@@ -392,8 +392,8 @@ proc:BEGIN
 
 	SELECT COUNT(1) INTO v_checker
 	FROM db_market.products
-	WHERE name = _name
-	AND deleted_at IS NULL;
+	WHERE deleted_at IS NULL
+	AND name = _name;
 
 	IF v_checker > 0 THEN
 		SELECT
@@ -441,8 +441,8 @@ proc:BEGIN
 
 	SELECT COUNT(1) INTO v_checker
 	FROM db_market.products
-	WHERE product_id = _id
-	AND deleted_at IS NULL;
+	WHERE deleted_at IS NULL
+	AND product_id = _id;
 
 	IF v_checker < 1 THEN
 		SELECT
@@ -498,8 +498,8 @@ proc:BEGIN
 
 	SELECT COUNT(1) INTO v_checker
 	FROM db_market.products
-	WHERE product_id = _id
-	AND deleted_at IS NULL;
+	WHERE deleted_at IS NULL
+	AND product_id = _id;
 
 	IF v_checker < 1 THEN
 		SELECT
@@ -557,8 +557,8 @@ proc:BEGIN
 	-- code
 	SELECT COUNT(1) INTO v_checker
 	FROM db_market.products
-	WHERE product_id = _id
-	AND deleted_at IS NULL;
+	WHERE deleted_at IS NULL
+	AND product_id = _id;
 
 	IF v_checker < 1 THEN
 		SELECT
@@ -669,8 +669,8 @@ proc:BEGIN
 	-- code
 	SELECT COUNT(1) INTO v_checker
 	FROM db_market.customers
-	WHERE customer_id = _id
-	AND deleted_at IS NULL;
+	WHERE deleted_at IS NULL
+	AND customer_id = _id;
 
 	IF v_checker < 1 THEN
 		SELECT
@@ -713,8 +713,8 @@ proc:BEGIN
 	-- code
 	SELECT COUNT(1) INTO v_checker
 	FROM db_market.customers
-	WHERE name = _name
-	AND deleted_at IS NULL;
+	WHERE deleted_at IS NULL
+	AND name = _name;
 
 	IF v_checker < 1 THEN
 		SELECT
