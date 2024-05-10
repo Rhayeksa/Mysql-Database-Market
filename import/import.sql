@@ -103,7 +103,7 @@ proc:BEGIN
 			NOW() AS datetime
 			, 400 AS code
 			, 'Bad Request' AS status
-			, 'Parameter Size dan Page tidak boleh kurang dari 1' AS message;
+			, 'Size dan Page tidak boleh kurang dari 1' AS message;
 		ROLLBACK;
 		LEAVE proc;
 	END IF;
