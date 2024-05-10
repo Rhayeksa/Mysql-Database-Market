@@ -457,3 +457,77 @@ proc:BEGIN
 	COMMIT;
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.ProductEditOneById(
+	IN _id INT
+	, IN _name VARCHAR(45)
+	, IN _price INT
+	, IN _description TEXT
+)
+proc:BEGIN
+	-- variabel
+	DECLARE v_checker INT DEFAULT 0;
+	DECLARE v_name VARCHAR(45);
+	DECLARE v_price INT;
+	DECLARE v_description TEXT;
+
+	-- code
+	IF _price < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad request' AS status
+			, 'Price tidak boleh kurang dari 1!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
+
+	SELECT COUNT(1) INTO v_checker
+	FROM db_market.products
+	WHERE product_id = _id
+	AND deleted_at IS NULL;
+
+	IF v_checker < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 404 AS code
+			, 'Not found' AS status
+			, 'Produk dengan id tersebut tidak ditemukan!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	ELSEIF v_checker > 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 409 AS code
+			, 'Conflict' AS status
+			, 'Produk dengan id tersebut duplikat!' AS message;
+		ROLLBACK;
+		LEAVE proc;	
+    END IF;
+
+	SELECT name, price, description
+	INTO v_name, v_price, v_description
+	FROM db_market.products
+	WHERE product_id = _id;
+
+	SET v_name = IFNULL(_name, v_name);
+	SET v_price = IFNULL(_price, v_price);
+	SET v_description = IFNULL(_description, v_description);
+
+	UPDATE db_market.products
+	SET name = v_name
+		, price = v_price
+		, description = v_description
+		, updated_at = NOW()
+	WHERE product_id = _id;
+
+	SELECT
+		NOW() AS datetime
+		, 200 AS code
+		, 'OK' AS status
+		, 'Stok berhasil diubah!' AS message;
+
+	COMMIT;
+END //
+DELIMITER ;
