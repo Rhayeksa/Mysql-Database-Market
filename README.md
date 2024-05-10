@@ -193,14 +193,14 @@ docker exec -t mysql_database_market mysql --user=root --password=root --execute
 
 ### Module Customers
 
-#### Customer Get All (building)
+#### Customer Get All
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.CustomerGetAll(
-  :_size -- => [NULL || 10]
-  , :_page -- => [NULL || 1]
+  :_size -- => INT [NULL || 10]
+  , :_page -- => INT [NULL || 1]
 );
 ```
 
