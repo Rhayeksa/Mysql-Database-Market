@@ -252,10 +252,20 @@ proc:BEGIN
 	DECLARE v_total_page INT;
 	
 	-- code
+	IF _size <= 0 OR _page <= 0 THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad Request' AS status
+			, 'Size dan Page tidak boleh kurang dari 1' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
+
 	SELECT COUNT(1) INTO v_total_data
 	FROM db_market.products
 	WHERE deleted_at IS NULL
-	AND name LIKE CONCAT('%', _name , '%')
+	AND name LIKE CONCAT('%', _name , '%');
 
 	IF v_total_data < 1 THEN
 		SELECT
