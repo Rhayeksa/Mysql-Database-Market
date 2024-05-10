@@ -278,16 +278,16 @@ CALL db_market.CustomerGetByGender(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerGetByGender(:_name, :_size, :_page)"
 ```
 
-#### Customer Add One (building)
+#### Customer Add One
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.CustomerAddOne(
-  :_name -- => ['Customer 1']
-  , :_gender -- => ['Pria' || 'Wanita']
-  , :_address -- => ['Address 1']
-  , :_is_member -- => [TRUE || FALSE]
+  :_name -- => VARCHAR(45) ['Customer 1']
+  , :_gender -- => VARCHAR(6) ['Pria' || 'Wanita']
+  , :_address -- => TEXT ['Address 1']
+  , :_is_member -- => BOOLEAN [TRUE || FALSE]
 );
 ```
 

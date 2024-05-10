@@ -892,3 +892,45 @@ proc:BEGIN
 	COMMIT;
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.CustomerAddOne(
+	IN _name VARCHAR(45)
+	, IN _gender VARCHAR(6)
+	, IN _address TEXT
+	, IN _is_member BOOLEAN
+)
+proc:BEGIN
+	-- code
+	IF _gender NOT IN('Pria', 'Wanita') THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad Request' AS status
+			, 'Gender hanya dapat diinput Pria atau Wanita' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
+
+	IF _is_member NOT IN(1, 0, TRUE, FALSE) THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad Request' AS status
+			, 'is_member hanya dapat diinput TRUE atau FALSE' AS message;
+		ROLLBACK;
+		LEAVE proc;		
+	END IF;
+
+	INSERT INTO db_market.customers(name, gender, address, is_member, created_at, updated_at)
+	VALUES(_name, CONCAT(UPPER(SUBSTRING(_gender,1,1)), LOWER(SUBSTRING(_gender,2))), _address, _is_member, NOW(), NOW());
+
+	SELECT
+		NOW() AS datetime
+		, 201 AS code
+		, 'Created' AS status
+		, 'Pelanggan berhasil ditambah!' AS message;
+
+	COMMIT;
+END //
+DELIMITER ;
