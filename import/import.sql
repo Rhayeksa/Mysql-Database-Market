@@ -580,3 +580,113 @@ proc:BEGIN
 	COMMIT;
 END //
 DELIMITER ;
+
+-- Module Customer
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.CustomerGetAll(
+	IN _size INT
+	, IN _page INT
+)
+proc:BEGIN
+	-- variabel
+	DECLARE v_offset INT;
+	DECLARE v_total_data INT;
+
+	-- code
+	IF _size <= 0 OR _page <= 0 THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad Request' AS status
+			, 'Size dan Page tidak boleh kurang dari 1' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
+
+	SELECT COUNT(1) INTO v_total_data
+	FROM db_market.customers
+	WHERE deleted_at IS NULL;
+
+	IF v_total_data < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 204 AS code
+			, 'No Content' AS status
+			, 'No Content' AS message;
+	ELSE
+		SELECT
+			NOW() AS datetime
+			, 200 AS code
+			, 'OK' AS status
+			, 'OK' AS message;		
+	END IF;
+
+	SET _size = IFNULL(_size, 10);
+	SET _page = IFNULL(_page, 1);
+	SET v_offset = (_page - 1) * _size;
+
+	SELECT
+		customer_id
+		, name
+		, gender
+		, address
+		, IF(is_member = 1, 'Yes', 'No') AS 'member'
+	FROM db_market.customers
+	WHERE deleted_at IS NULL
+	ORDER BY customer_id DESC
+	LIMIT _size
+	OFFSET v_offset;
+
+	SELECT
+		_size AS page_size
+		, v_total_data AS total_data
+		, CEIL(v_total_data / _size) AS total_page
+		, _page AS current_page;
+
+	COMMIT;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.CustomerGetById(
+	IN _id INT
+)
+proc:BEGIN
+	-- variabel
+	DECLARE v_checker INT DEFAULT 0;
+	
+	-- code
+	SELECT COUNT(1) INTO v_checker
+	FROM db_market.customers
+	WHERE customer_id = _id
+	AND deleted_at IS NULL;
+
+	IF v_checker < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 404 AS code
+			, 'Not found' AS status
+			, 'Customer dengan id tersebut tidak ditemukan!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
+
+	SELECT
+		NOW() AS datetime
+		, 200 AS code
+		, 'OK' AS status
+		, 'OK' AS message;
+   
+   SELECT
+		customer_id
+		, name
+		, gender
+		, address
+		, IF(is_member = 1, 'Yes', 'No') AS 'member'
+	FROM db_market.customers
+	WHERE deleted_at IS NULL
+	AND customer_id = _id;
+
+	COMMIT;
+END //
+DELIMITER ;

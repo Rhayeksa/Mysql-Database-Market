@@ -210,13 +210,13 @@ CALL db_market.CustomerGetAll(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerGetAll(:_size, :_page)"
 ```
 
-#### Customer Get By Id (building)
+#### Customer Get By Id
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.CustomerGetById(
-  :_id -- => [1]
+  :_id -- => INT [1]
 );
 ```
 
