@@ -937,5 +937,90 @@ END //
 DELIMITER ;
 
 DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.CustomerEditOneById(
+	IN _id INT
+	, IN _name VARCHAR(45)
+	, IN _gender VARCHAR(6)
+	, IN _address TEXT
+	, IN _is_member BOOLEAN
+)
+proc:BEGIN
+	-- variabel
+	DECLARE v_checker INT DEFAULT 0;
+	DECLARE v_name VARCHAR(45);
+	DECLARE v_gender VARCHAR(6);
+	DECLARE v_address TEXT;
+	DECLARE v_is_member BOOLEAN;
 
+	
+	-- code
+	SELECT COUNT(1) INTO v_checker
+	FROM db_market.customers
+	WHERE deleted_at IS NULL
+	AND customer_id = _id;
+
+	IF v_checker < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 404 AS code
+			, 'Not found' AS status
+			, 'Customer dengan id tersebut tidak ditemukan!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	ELSEIF v_checker > 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 409 AS code
+			, 'Conflict' AS status
+			, 'Customer dengan id tersebut duplikat!' AS message;
+		ROLLBACK;
+		LEAVE proc;	
+	END IF;
+
+	IF _gender NOT IN('Pria', 'Wanita') THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad Request' AS status
+			, 'Gender hanya dapat diinput Pria atau Wanita' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
+
+	IF _is_member NOT IN(1, 0, TRUE, FALSE) THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad Request' AS status
+			, 'is_member hanya dapat diinput TRUE atau FALSE' AS message;
+		ROLLBACK;
+		LEAVE proc;		
+	END IF;
+
+	SELECT name, gender, address, is_member
+	INTO v_name, v_gender, v_address, v_is_member
+	FROM db_market.customers
+	WHERE customer_id = _id;
+
+	SET v_name = IFNULL(_name, v_name);
+	SET v_gender = IFNULL(_gender, v_gender);
+	SET v_address = IFNULL(_address, v_address);
+	SET v_is_member = IFNULL(_is_member, v_is_member);
+
+	UPDATE db_market.customers
+	SET updated_at = NOW()
+		, name = v_name
+		, gender = CONCAT(UPPER(SUBSTRING(v_gender,1,1)), LOWER(SUBSTRING(v_gender,2)))
+		, address = v_address
+		, is_member = v_is_member
+	WHERE customer_id = _id;
+
+	SELECT
+		NOW() AS datetime
+		, 200 AS code
+		, 'OK' AS status
+		, 'Pelanggan berhasil diubah!' AS message;
+
+	COMMIT;
+END //
 DELIMITER ;

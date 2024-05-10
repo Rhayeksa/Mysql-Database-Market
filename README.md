@@ -297,17 +297,17 @@ CALL db_market.CustomerAddOne(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerAddOne(:_name, :_gender, :_address, :_is_member)"
 ```
 
-#### Customer Edit One By Id (building)
+#### Customer Edit One By Id
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.CustomerEditOneById(
-  :_id -- => [1]
-  , :_name -- => [NULL || 'name']
-  , :_gender -- => [NULL || 'Pria' || 'Wanita']
-  , :_address -- => [NULL || 'address']
-  , :_is_member -- => [NULL || TRUE || FALSE]
+  :_id -- => INT [1]
+  , :_name -- => VARCHAR(45) [NULL || 'name']
+  , :_gender -- => VARCHAR(6) [NULL || 'Pria' || 'Wanita']
+  , :_address -- => TEXT [NULL || 'address']
+  , :_is_member -- => BOOLEAN [NULL || TRUE || FALSE]
 );
 ```
 
