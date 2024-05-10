@@ -690,3 +690,47 @@ proc:BEGIN
 	COMMIT;
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.CustomerGetByName(
+	IN _name VARCHAR(45)
+)
+proc:BEGIN
+	-- variabel
+	DECLARE v_checker INT DEFAULT 0;
+	
+	-- code
+	SELECT COUNT(1) INTO v_checker
+	FROM db_market.customers
+	WHERE name = _name
+	AND deleted_at IS NULL;
+
+	IF v_checker < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 404 AS code
+			, 'Not found' AS status
+			, 'Customer dengan nama tersebut tidak ditemukan!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+    END IF;
+
+	SELECT
+		NOW() AS datetime
+		, 200 AS code
+		, 'OK' AS status
+		, 'OK' AS message;
+   
+   SELECT
+		customer_id
+		, name
+		, gender
+		, address
+		, IF(is_member = 1, 'Yes', 'No') AS 'member'
+	FROM db_market.customers
+	WHERE deleted_at IS NULL
+	AND name = _name;
+
+	COMMIT;
+END //
+DELIMITER ;

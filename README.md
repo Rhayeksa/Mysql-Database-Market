@@ -226,13 +226,13 @@ CALL db_market.CustomerGetById(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerGetById(:_id)"
 ```
 
-#### Customer Get By Name (building)
+#### Customer Get By Name
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.CustomerGetByName(
-  :_name -- ['Customer 1']
+  :_name -- VARCHAR(45) ['Customer 1']
 );
 ```
 
