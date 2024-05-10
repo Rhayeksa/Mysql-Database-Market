@@ -412,7 +412,7 @@ proc:BEGIN
 		NOW() AS datetime
 		, 201 AS code
 		, 'Created' AS status
-		, 'Produk berhasil di tambah!' AS message;
+		, 'Produk berhasil ditambah!' AS message;
 
 	COMMIT;
 END //
