@@ -517,7 +517,7 @@ proc:BEGIN
 			, 'Produk dengan id tersebut duplikat!' AS message;
 		ROLLBACK;
 		LEAVE proc;	
-    END IF;
+	END IF;
 
 	SELECT name, price, description
 	INTO v_name, v_price, v_description
@@ -533,7 +533,8 @@ proc:BEGIN
 		, price = v_price
 		, description = v_description
 		, updated_at = NOW()
-	WHERE product_id = _id;
+	WHERE product_id = _id
+	AND deleted_at IS NOT NULL;
 
 	SELECT
 		NOW() AS datetime
