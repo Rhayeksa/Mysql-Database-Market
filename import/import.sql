@@ -275,7 +275,7 @@ proc:BEGIN
 	SET _page = IFNULL(_page, 1);
 	SET v_offset = (_page - 1) * _size;
    
-   SELECT
+	SELECT
 		product_id
 		, name
 		, price
@@ -284,6 +284,7 @@ proc:BEGIN
 	FROM db_market.products
 	WHERE deleted_at IS NULL
 	AND name LIKE CONCAT('%', _name , '%')
+	ORDER BY name ASC
 	LIMIT _size
 	OFFSET v_offset;
 
