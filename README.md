@@ -260,15 +260,15 @@ CALL db_market.CustomerGetByLikeName(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerGetByLikeName(:_name, :_size, :_page)"
 ```
 
-#### Customer Get By Gender (building)
+#### Customer Get By Gender
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.CustomerGetByGender(
-  :_gender -- => ['Pria', 'Wanita']
-  , :_size -- => [NULL, 10]
-  , :_page -- => [NULL, 1]
+  :_gender -- => VARCHAR(6) ['Pria', 'Wanita']
+  , :_size -- => INT [NULL, 10]
+  , :_page -- => INT [NULL, 1]
 );
 ```
 

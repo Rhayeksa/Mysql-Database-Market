@@ -813,3 +813,82 @@ proc:BEGIN
 	COMMIT;
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.CustomerGetByGender(
+	IN _gender VARCHAR(6)
+	, IN _size INT
+	, IN _page INT
+)
+proc:BEGIN
+	-- variabel	
+	DECLARE v_offset INT;
+	DECLARE v_total_data INT;
+	DECLARE v_total_page INT;
+	
+	-- code
+	IF _gender != 'Pria' AND _gender != 'Wanita' THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad Request' AS status
+			, 'Gender tidak boleh selain Pria dan Wanita' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
+
+	IF _size <= 0 OR _page <= 0 THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad Request' AS status
+			, 'Size dan Page tidak boleh kurang dari 1' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
+
+	SELECT COUNT(1) INTO v_total_data
+	FROM db_market.customers
+	WHERE deleted_at IS NULL
+	AND gender = _gender;
+
+	IF v_total_data < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 204 AS code
+			, 'No Content' AS status
+			, 'No Content' AS message;
+	ELSE
+		SELECT
+			NOW() AS datetime
+			, 200 AS code
+			, 'OK' AS status
+			, 'OK' AS message;		
+	END IF;
+
+	SET _size = IFNULL(_size, 10);
+	SET _page = IFNULL(_page, 1);
+	SET v_offset = (_page - 1) * _size;
+   
+	SELECT
+		customer_id
+		, name
+		, gender
+		, address
+		, IF(is_member = 1, 'Yes', 'No') AS 'member'
+	FROM db_market.customers
+	WHERE deleted_at IS NULL
+	AND gender = _gender
+	ORDER BY name ASC
+	LIMIT _size
+	OFFSET v_offset;
+
+	SELECT
+		_size AS page_size
+		, v_total_data AS total_data
+		, CEIL(v_total_data / _size) AS total_page
+		, _page AS current_page;
+
+	COMMIT;
+END //
+DELIMITER ;
