@@ -138,6 +138,7 @@ proc:BEGIN
 		, description
 	FROM db_market.products
 	WHERE deleted_at IS NULL
+	ORDER BY product_id DESC
 	LIMIT _size
 	OFFSET v_offset;
 
