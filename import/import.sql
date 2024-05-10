@@ -110,7 +110,7 @@ proc:BEGIN
 
 	SELECT COUNT(1) INTO v_total_data
 	FROM db_market.products
-	WHERE deleted_at IS NULL
+	WHERE deleted_at IS NULL;
 
 	IF v_total_data < 1 THEN
 		SELECT
