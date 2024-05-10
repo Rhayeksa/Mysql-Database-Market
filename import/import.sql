@@ -163,8 +163,8 @@ proc:BEGIN
 	-- code
 	SELECT COUNT(1) INTO v_checker
 	FROM db_market.products
-	WHERE product_id = _id
-	AND deleted_at IS NULL;
+	WHERE deleted_at IS NULL
+	AND product_id = _id;
 
 	IF v_checker < 1 THEN
 		SELECT
@@ -934,4 +934,8 @@ proc:BEGIN
 
 	COMMIT;
 END //
+DELIMITER ;
+
+DELIMITER //
+
 DELIMITER ;
