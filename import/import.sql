@@ -1024,3 +1024,49 @@ proc:BEGIN
 	COMMIT;
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.CustomerDeleteOneById(
+	IN _id INT
+)
+proc:BEGIN
+	-- variabel
+	DECLARE v_checker INT DEFAULT 0;
+
+	-- code
+	SELECT COUNT(1) INTO v_checker
+	FROM db_market.customers
+	WHERE deleted_at IS NULL
+	AND customer_id = _id;
+
+	IF v_checker < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 404 AS code
+			, 'Not found' AS status
+			, 'Pelanggan dengan id tersebut tidak ditemukan!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	ELSEIF v_checker > 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 409 AS code
+			, 'Conflict' AS status
+			, 'Pelanggan dengan id tersebut duplikat!' AS message;
+		ROLLBACK;
+		LEAVE proc;	
+    END IF;
+
+	UPDATE db_market.customers
+	SET deleted_at = NOW()
+	WHERE customer_id = _id;
+
+	SELECT
+		NOW() AS datetime
+		, 200 AS code
+		, 'OK' AS status
+		, 'Pelanggan dengan id tersebut berhasil dihapus!' AS message;
+
+	COMMIT;
+END //
+DELIMITER ;

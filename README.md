@@ -317,13 +317,13 @@ CALL db_market.CustomerEditOneById(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerEditOneById(:id, :_name, :_gender, :_address, :_is_member)"
 ```
 
-#### Customer Delete One By Id (building)
+#### Customer Delete One By Id
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.CustomerDeleteOneById(
-  :_id -- => [1]
+  :_id -- => INT [1]
 );
 ```
 
