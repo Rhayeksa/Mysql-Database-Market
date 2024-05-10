@@ -242,15 +242,15 @@ CALL db_market.CustomerGetByName(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerGetByName(:_name)"
 ```
 
-#### Customer Get By Like Name (building)
+#### Customer Get By Like Name
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.CustomerGetByLikeName(
-  :_name -- => ['Customer 1']
-  , :_size -- => [NULL, 10]
-  , :_page -- => [NULL, 1]
+  :_name -- VARCHAR(45) ['Customer 1']
+  , :_size -- => INT [NULL, 10]
+  , :_page -- => INT [NULL, 1]
 );
 ```
 
