@@ -156,17 +156,16 @@ CALL db_market.ProductAddStockById(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductAddStockById(:_id, :_name, :_price, :_qty, :_description)"
 ```
 
-#### Product Edit One By Id (building)
+#### Product Edit One By Id
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.ProductEditOneById(
-  :_id -- => [1]
-  , :_name -- => [NULL || 'name']
-  , :_price  -- => [NULL || 35000]
-  , :_qty  -- => [NULL || 15]
-  , :_description  -- => [NULL || 'description']
+  :_id -- => INT [1]
+  , :_name -- => VARCHAR(45) [NULL || 'Product update']
+  , :_price  -- => INT [NULL || 35000]
+  , :_description  -- => TEXT [NULL || 'Description update']
 );
 ```
 
