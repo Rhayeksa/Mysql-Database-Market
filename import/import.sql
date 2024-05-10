@@ -526,7 +526,53 @@ proc:BEGIN
 		NOW() AS datetime
 		, 200 AS code
 		, 'OK' AS status
-		, 'Stok berhasil diubah!' AS message;
+		, 'Produk dengan id tersebut berhasil diubah!' AS message;
+
+	COMMIT;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.ProductDeleteOneById(
+	IN _id INT
+)
+proc:BEGIN
+	-- variabel
+	DECLARE v_checker INT DEFAULT 0;
+
+	-- code
+	SELECT COUNT(1) INTO v_checker
+	FROM db_market.products
+	WHERE product_id = _id
+	AND deleted_at IS NULL;
+
+	IF v_checker < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 404 AS code
+			, 'Not found' AS status
+			, 'Produk dengan id tersebut tidak ditemukan!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	ELSEIF v_checker > 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 409 AS code
+			, 'Conflict' AS status
+			, 'Produk dengan id tersebut duplikat!' AS message;
+		ROLLBACK;
+		LEAVE proc;	
+    END IF;
+
+	UPDATE db_market.products
+	SET deleted_at = NOW()
+	WHERE product_id = _id;
+
+	SELECT
+		NOW() AS datetime
+		, 200 AS code
+		, 'OK' AS status
+		, 'Produk dengan id tersebut berhasil dihapus!' AS message;
 
 	COMMIT;
 END //

@@ -175,13 +175,13 @@ CALL db_market.ProductEditOneById(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.ProductEditOneById(:_id, :_name, :_price, :_qty, :_description)"
 ```
 
-#### Product Delete One By Id (building)
+#### Product Delete One By Id
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.ProductDeleteOneById(
-  :_id -- => [1]
+  :_id -- => INT [1]
 );
 ```
 
