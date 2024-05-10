@@ -832,7 +832,7 @@ proc:BEGIN
 			NOW() AS datetime
 			, 400 AS code
 			, 'Bad Request' AS status
-			, 'Gender tidak boleh selain Pria dan Wanita' AS message;
+			, 'Gender hanya dapat diinput Pria atau Wanita' AS message;
 		ROLLBACK;
 		LEAVE proc;
 	END IF;
