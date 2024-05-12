@@ -1073,5 +1073,92 @@ DELIMITER ;
 
 -- Module Customer Order
 DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.CustomerOrderGetByCustomerOrderId(
+	IN _id INT
+	, IN _size INT
+	, IN _page INT
+)
+proc:BEGIN
+	-- variabel
+	DECLARE v_checker INT DEFAULT 0;
+	DECLARE v_offset INT;
+	DECLARE v_total_data INT;
 
+	-- code
+	IF _size <= 0 OR _page <= 0 THEN
+		SELECT
+			NOW() AS datetime
+			, 400 AS code
+			, 'Bad Request' AS status
+			, 'Size dan Page tidak boleh kurang dari 1' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	END IF;
+
+	SELECT COUNT(1) INTO v_checker
+	FROM db_market.customer_order
+	WHERE deleted_at IS NULL
+	AND customer_order_id = _id;
+
+	IF v_checker < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 404 AS code
+			, 'Not found' AS status
+			, 'Id customer order atau Kode order tersebut tidak ditemukan!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+    END IF;
+
+	SELECT COUNT(1) INTO v_total_data
+	FROM db_market.customer_order_detail
+	WHERE deleted_at IS NULL
+	AND customer_order_id = _id;
+
+	IF v_total_data < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 204 AS code
+			, 'No Content' AS status
+			, 'No Content' AS message;
+	ELSE
+		SELECT
+			NOW() AS datetime
+			, 200 AS code
+			, 'OK' AS status
+			, 'OK' AS message;		
+	END IF;
+
+	SET _size = IFNULL(_size, 10);
+	SET _page = IFNULL(_page, 1);
+	SET v_offset = (_page - 1) * _size;
+	
+	SELECT
+		co.customer_order_id AS kode_order
+		, c.name AS pelanggan
+		, IF(c.is_member = 1, 'Yes', 'No') AS 'member'
+		, p.name AS produk
+		, cod.price AS harga
+		, cod.quantity AS qty
+		, cod.total_price
+		, IFNULL(co.grand_total_price, 0) AS grand_total_harga
+	FROM db_market.customer_order co
+	INNER JOIN db_market.customers c ON c.customer_id = co.customer_id 
+	LEFT JOIN db_market.customer_order_detail cod ON cod.customer_order_id = co.customer_order_id
+	INNER JOIN db_market.products p ON p.product_id = cod.product_id 
+	WHERE co.customer_order_id = _id
+	ORDER BY p.name
+	LIMIT _size
+	OFFSET v_offset;
+
+	IF NOT v_total_data < 1 THEN
+		SELECT
+			_size AS page_size
+			, v_total_data AS total_data
+			, CEIL(v_total_data / _size) AS total_page
+			, _page AS current_page;	
+	END IF;
+
+	COMMIT;
+END //
 DELIMITER ;

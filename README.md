@@ -335,13 +335,15 @@ docker exec -t mysql_database_market mysql --user=root --password=root --execute
 
 ### Module Customer Order
 
-#### Customer Order Get By Customer Order Id (building)
+#### Customer Order Get By Customer Order Id
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.CustomerOrderGetByCustomerOrderId(
-  :_id -- [1]
+  :_id -- INT [1]
+  , :_size -- INT [NULL || 10]
+  , :_page -- INT [NULL || 1]
 );
 ```
 
