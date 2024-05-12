@@ -64,14 +64,14 @@ VALUES
 
 INSERT INTO db_market.customers(customer_id, name, gender, address, is_member, created_at, updated_at)
 VALUES
-	(1, 'Pelanggan', 'Pria', 'Home', FALSE, NOW(), NOW())
+	(1, 'Umum', 'Pria', 'Home', FALSE, NOW(), NOW())
 	, (2, 'Jhon', 'Pria', 'Perum Bumi Indah Blok B1 No. 3', TRUE, NOW(), NOW())
 	, (3, 'Fanny', 'Wanita', 'Perum Taman Teknologi AA2 No. 4', TRUE, NOW(), NOW())
 ;
 
 INSERT INTO db_market.customer_order(customer_order_id, customer_id, grand_total_price, created_at, updated_at)
 VALUES
-	(1, 1, 16900, NOW(), NOW())
+	(1, 1, 169000, NOW(), NOW())
 	, (2, 2, 50000, NOW(), NOW())
 	, (3, 3, 130000, NOW(), NOW())
 ;
@@ -1069,4 +1069,9 @@ proc:BEGIN
 
 	COMMIT;
 END //
+DELIMITER ;
+
+-- Module Customer Order
+DELIMITER //
+
 DELIMITER ;
