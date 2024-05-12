@@ -353,23 +353,6 @@ CALL db_market.CustomerOrderGetByCustomerOrderId(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerOrderGetByCustomerOrderId(:_id)"
 ```
 
-#### Customer Order Get By Customer Id (building)
-
-- Menggunakan Aplikasi GUI
-
-```sql
-CALL db_market.CustomerOrderGetByCustomerId(
-  :_id -- => [1]
-  , _trans_n -- => [1]
-);
-```
-
-- Menggunakan docker CLI
-
-```console
-docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerOrderGetByCustomerId(:_id, :_trans_n)"
-```
-
 #### Customer Order Add One (building)
 
 - Menggunakan Aplikasi GUI
