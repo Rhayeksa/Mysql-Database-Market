@@ -370,13 +370,13 @@ CALL db_market.CustomerOrderAddOne(
 docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerOrderAddOne(:_customer_id, _product_id_qty_arr_json)"
 ```
 
-#### Customer Order Delete By Customer Order Id (building)
+#### Customer Order Delete By Customer Order Id
 
 - Menggunakan Aplikasi GUI
 
 ```sql
 CALL db_market.CustomerOrderDeleteByCustomerOrderId(
-  :_id -- [1]
+  :_id -- INT [1]
 );
 ```
 
