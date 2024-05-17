@@ -359,15 +359,17 @@ docker exec -t mysql_database_market mysql --user=root --password=root --execute
 
 ```sql
 CALL db_market.CustomerOrderAddOne(
-  :_customer_id -- => [1]
-  , :_product_id_qty_arr_json -- => [{"product_id":1, "qty":15}, {"product_id":2, "qty":15}, {"product_id":3, "qty":15}]
+  :_customer_id -- => INT [1]
+  , :_product_id_qty_arr_json -- => LONGTEXT JSON_ARRAY({"product_id":1, "qty":15}, {"product_id":2, "qty":15}, {"product_id":3, "qty":15})
 );
 ```
 
 - Menggunakan docker CLI
 
 ```console
-docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerOrderAddOne(:_customer_id, _product_id_qty_arr_json)"
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerOrderAddOne(:_customer_id, :_product_id_qty_arr_json)"
+
+docker exec -t mysql_database_market mysql --user=root --password=root --execute="CALL db_market.CustomerOrderAddOne(2, JSON_ARRAY('{\"product_id\": 1, \"qty\": 10}', '{\"product_id\": 1, \"qty\": 10}'))"
 ```
 
 #### Customer Order Delete By Customer Order Id
