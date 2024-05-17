@@ -98,6 +98,8 @@ proc:BEGIN
 	DECLARE v_total_data INT;
 
 	-- code
+	START TRANSACTION;
+	
 	IF _size <= 0 OR _page <= 0 THEN
 		SELECT
 			NOW() AS datetime
@@ -158,15 +160,16 @@ CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetById(
 )
 proc:BEGIN
 	-- variabel
-	DECLARE v_checker INT DEFAULT 0;
 	
 	-- code
-	SELECT COUNT(1) INTO v_checker
+	START TRANSACTION;
+	
+	SELECT COUNT(1) INTO @checker
 	FROM db_market.products
 	WHERE deleted_at IS NULL
 	AND product_id = _id;
 
-	IF v_checker < 1 THEN
+	IF @checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
@@ -201,15 +204,16 @@ CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetByName(
 	IN _name VARCHAR(45)
 )
 proc:BEGIN
-	DECLARE v_checker INT DEFAULT 0;
 	
 	-- code
-	SELECT COUNT(1) INTO v_checker
+	START TRANSACTION;
+	
+	SELECT COUNT(1) INTO @checker
 	FROM db_market.products
 	WHERE deleted_at IS NULL
 	AND name = _name;
 
-	IF v_checker < 1 THEN
+	IF @checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
@@ -252,6 +256,8 @@ proc:BEGIN
 	DECLARE v_total_page INT;
 	
 	-- code
+	START TRANSACTION;
+	
 	IF _size <= 0 OR _page <= 0 THEN
 		SELECT
 			NOW() AS datetime
@@ -320,6 +326,8 @@ proc:BEGIN
 	DECLARE v_total_page INT;
 	
 	-- code
+	START TRANSACTION;
+	
 	SET v_total_data = (
 		SELECT COUNT(1)
 		FROM db_market.products
@@ -377,9 +385,10 @@ CREATE PROCEDURE IF NOT EXISTS db_market.ProductAddOne(
 )
 proc:BEGIN
 	-- variabel	
-	DECLARE v_checker INT DEFAULT 0;
 	
 	-- code
+	START TRANSACTION;
+	
 	IF _price < 1 OR _qty < 1 THEN
 		SELECT
 			NOW() AS datetime
@@ -390,12 +399,12 @@ proc:BEGIN
 		LEAVE proc;
 	END IF;
 
-	SELECT COUNT(1) INTO v_checker
+	SELECT COUNT(1) INTO @checker
 	FROM db_market.products
 	WHERE deleted_at IS NULL
 	AND name = _name;
 
-	IF v_checker > 0 THEN
+	IF @checker > 0 THEN
 		SELECT
 			NOW() AS datetime
 			, 409 AS code
@@ -425,10 +434,11 @@ CREATE PROCEDURE IF NOT EXISTS db_market.ProductAddStockById(
 )
 proc:BEGIN
 	-- variabel
-	DECLARE v_checker INT DEFAULT 0;
 	DECLARE v_stock INT;
 	
 	-- code
+	START TRANSACTION;
+	
 	IF _qty < 1 THEN
 		SELECT
 			NOW() AS datetime
@@ -439,12 +449,12 @@ proc:BEGIN
 		LEAVE proc;
 	END IF;
 
-	SELECT COUNT(1) INTO v_checker
+	SELECT COUNT(1) INTO @checker
 	FROM db_market.products
 	WHERE deleted_at IS NULL
 	AND product_id = _id;
 
-	IF v_checker < 1 THEN
+	IF @checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
@@ -480,12 +490,13 @@ CREATE PROCEDURE IF NOT EXISTS db_market.ProductEditOneById(
 )
 proc:BEGIN
 	-- variabel
-	DECLARE v_checker INT DEFAULT 0;
 	DECLARE v_name VARCHAR(45);
 	DECLARE v_price INT;
 	DECLARE v_description TEXT;
 
 	-- code
+	START TRANSACTION;
+	
 	IF _price < 1 THEN
 		SELECT
 			NOW() AS datetime
@@ -496,12 +507,12 @@ proc:BEGIN
 		LEAVE proc;
 	END IF;
 
-	SELECT COUNT(1) INTO v_checker
+	SELECT COUNT(1) INTO @checker
 	FROM db_market.products
 	WHERE deleted_at IS NULL
 	AND product_id = _id;
 
-	IF v_checker < 1 THEN
+	IF @checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
@@ -509,7 +520,7 @@ proc:BEGIN
 			, 'Produk dengan id tersebut tidak ditemukan!' AS message;
 		ROLLBACK;
 		LEAVE proc;
-	ELSEIF v_checker > 1 THEN
+	ELSEIF @checker > 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 409 AS code
@@ -552,15 +563,16 @@ CREATE PROCEDURE IF NOT EXISTS db_market.ProductDeleteOneById(
 )
 proc:BEGIN
 	-- variabel
-	DECLARE v_checker INT DEFAULT 0;
 
 	-- code
-	SELECT COUNT(1) INTO v_checker
+	START TRANSACTION;
+	
+	SELECT COUNT(1) INTO @checker
 	FROM db_market.products
 	WHERE deleted_at IS NULL
 	AND product_id = _id;
 
-	IF v_checker < 1 THEN
+	IF @checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
@@ -568,7 +580,7 @@ proc:BEGIN
 			, 'Produk dengan id tersebut tidak ditemukan!' AS message;
 		ROLLBACK;
 		LEAVE proc;
-	ELSEIF v_checker > 1 THEN
+	ELSEIF @checker > 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 409 AS code
@@ -604,6 +616,8 @@ proc:BEGIN
 	DECLARE v_total_data INT;
 
 	-- code
+	START TRANSACTION;
+	
 	IF _size <= 0 OR _page <= 0 THEN
 		SELECT
 			NOW() AS datetime
@@ -664,15 +678,16 @@ CREATE PROCEDURE IF NOT EXISTS db_market.CustomerGetById(
 )
 proc:BEGIN
 	-- variabel
-	DECLARE v_checker INT DEFAULT 0;
 	
 	-- code
-	SELECT COUNT(1) INTO v_checker
+	START TRANSACTION;
+	
+	SELECT COUNT(1) INTO @checker
 	FROM db_market.customers
 	WHERE deleted_at IS NULL
 	AND customer_id = _id;
 
-	IF v_checker < 1 THEN
+	IF @checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
@@ -708,15 +723,16 @@ CREATE PROCEDURE IF NOT EXISTS db_market.CustomerGetByName(
 )
 proc:BEGIN
 	-- variabel
-	DECLARE v_checker INT DEFAULT 0;
 	
 	-- code
-	SELECT COUNT(1) INTO v_checker
+	START TRANSACTION;
+	
+	SELECT COUNT(1) INTO @checker
 	FROM db_market.customers
 	WHERE deleted_at IS NULL
 	AND name = _name;
 
-	IF v_checker < 1 THEN
+	IF @checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
@@ -759,6 +775,8 @@ proc:BEGIN
 	DECLARE v_total_page INT;
 	
 	-- code
+	START TRANSACTION;
+	
 	IF _size <= 0 OR _page <= 0 THEN
 		SELECT
 			NOW() AS datetime
@@ -828,6 +846,8 @@ proc:BEGIN
 	DECLARE v_total_page INT;
 	
 	-- code
+	START TRANSACTION;
+	
 	IF _gender NOT IN('Pria', 'Wanita') THEN
 		SELECT
 			NOW() AS datetime
@@ -903,6 +923,8 @@ CREATE PROCEDURE IF NOT EXISTS db_market.CustomerAddOne(
 )
 proc:BEGIN
 	-- code
+	START TRANSACTION;
+	
 	IF _gender NOT IN('Pria', 'Wanita') THEN
 		SELECT
 			NOW() AS datetime
@@ -946,7 +968,6 @@ CREATE PROCEDURE IF NOT EXISTS db_market.CustomerEditOneById(
 )
 proc:BEGIN
 	-- variabel
-	DECLARE v_checker INT DEFAULT 0;
 	DECLARE v_name VARCHAR(45);
 	DECLARE v_gender VARCHAR(6);
 	DECLARE v_address TEXT;
@@ -954,12 +975,14 @@ proc:BEGIN
 
 	
 	-- code
-	SELECT COUNT(1) INTO v_checker
+	START TRANSACTION;
+	
+	SELECT COUNT(1) INTO @checker
 	FROM db_market.customers
 	WHERE deleted_at IS NULL
 	AND customer_id = _id;
 
-	IF v_checker < 1 THEN
+	IF @checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
@@ -967,7 +990,7 @@ proc:BEGIN
 			, 'Customer dengan id tersebut tidak ditemukan!' AS message;
 		ROLLBACK;
 		LEAVE proc;
-	ELSEIF v_checker > 1 THEN
+	ELSEIF @checker > 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 409 AS code
@@ -1031,15 +1054,16 @@ CREATE PROCEDURE IF NOT EXISTS db_market.CustomerDeleteOneById(
 )
 proc:BEGIN
 	-- variabel
-	DECLARE v_checker INT DEFAULT 0;
 
 	-- code
-	SELECT COUNT(1) INTO v_checker
+	START TRANSACTION;
+	
+	SELECT COUNT(1) INTO @checker
 	FROM db_market.customers
 	WHERE deleted_at IS NULL
 	AND customer_id = _id;
 
-	IF v_checker < 1 THEN
+	IF @checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
@@ -1047,7 +1071,7 @@ proc:BEGIN
 			, 'Pelanggan dengan id tersebut tidak ditemukan!' AS message;
 		ROLLBACK;
 		LEAVE proc;
-	ELSEIF v_checker > 1 THEN
+	ELSEIF @checker > 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 409 AS code
@@ -1080,11 +1104,12 @@ CREATE PROCEDURE IF NOT EXISTS db_market.CustomerOrderGetByCustomerOrderId(
 )
 proc:BEGIN
 	-- variabel
-	DECLARE v_checker INT DEFAULT 0;
 	DECLARE v_offset INT;
 	DECLARE v_total_data INT;
 
 	-- code
+	START TRANSACTION;
+	
 	IF _size <= 0 OR _page <= 0 THEN
 		SELECT
 			NOW() AS datetime
@@ -1095,12 +1120,12 @@ proc:BEGIN
 		LEAVE proc;
 	END IF;
 
-	SELECT COUNT(1) INTO v_checker
+	SELECT COUNT(1) INTO @checker
 	FROM db_market.customer_order
 	WHERE deleted_at IS NULL
 	AND customer_order_id = _id;
 
-	IF v_checker < 1 THEN
+	IF @checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
@@ -1156,7 +1181,7 @@ proc:BEGIN
 			_size AS page_size
 			, v_total_data AS total_data
 			, CEIL(v_total_data / _size) AS total_page
-			, _page AS current_page;	
+			, _page AS current_page;
 	END IF;
 
 	COMMIT;
@@ -1164,7 +1189,162 @@ END //
 DELIMITER ;
 
 DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS db_market.CustomerOrderAddOne(
+	IN _customer_id INT
+	, IN _product_id_qty_arr_json LONGTEXT
+)
+proc:BEGIN
+	-- variabel
+	DECLARE i INT UNSIGNED DEFAULT 0;
+	DECLARE v_count INT UNSIGNED DEFAULT JSON_LENGTH(_product_id_qty_arr_json);
+	DECLARE v_arr LONGTEXT DEFAULT NULL;
+	DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
 
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			mysql_code = RETURNED_SQLSTATE, mysql_msg = MESSAGE_TEXT;
+			-- SELECT "error", CONCAT( "Codigo de error: ",mysql_code, " mensaje_mysql: ",mysql_msg);
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
+
+ 	SET @current_datetime = NOW();
+	SET @grand_total_price = 0;
+	SET @reduce_stock = 0;
+
+	-- code
+	START TRANSACTION;
+	
+	SELECT COUNT(1) INTO @checker
+	FROM db_market.customers
+	WHERE deleted_at IS NULL
+	AND customer_id = _customer_id;
+
+	IF @checker < 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 404 AS code
+			, 'Not found' AS status
+			, 'Customer dengan id tersebut tidak ditemukan!' AS message;
+		ROLLBACK;
+		LEAVE proc;
+	ELSEIF @checker > 1 THEN
+		SELECT
+			NOW() AS datetime
+			, 409 AS code
+			, 'Conflict' AS status
+			, 'Customer dengan id tersebut duplikat!' AS message;
+		ROLLBACK;
+		LEAVE proc;			
+	END IF;
+   
+	SELECT MAX(customer_order_id) + 1
+	INTO @new_customer_order_id 
+	FROM db_market.customer_order;
+  
+ 	INSERT INTO db_market.customer_order
+ 	SET	customer_order_id = @new_customer_order_id
+ 		, customer_id = _customer_id
+ 		, grand_total_price = 0
+ 		, created_at = @current_datetime
+ 		, updated_at = @current_datetime;
+
+	WHILE i < v_count DO
+		SET v_arr = JSON_EXTRACT(_product_id_qty_arr_json, CONCAT('$[', i, ']'));
+
+		SELECT REPLACE(v_arr,'\\','') into v_arr;
+		SELECT REPLACE(v_arr,'"{','{') into v_arr;
+		SELECT REPLACE(v_arr,'}"','}') into v_arr;
+
+		SET @product_id = JSON_EXTRACT(v_arr, '$.product_id');
+		SET @qty = JSON_EXTRACT(v_arr, '$.qty');
+
+		SELECT COUNT(1), price, stock
+		INTO @checker, @price, @stock
+		FROM db_market.products
+		WHERE deleted_at IS NULL
+		AND product_id = @product_id
+		GROUP BY price, stock;
+
+		IF @checker < 1 THEN
+			SELECT
+				NOW() AS datetime
+				, 404 AS code
+				, 'Not found' AS status
+				, CONCAT('Product dengan id ', @product_id ,' tidak ditemukan!') AS message;
+			ROLLBACK;
+			LEAVE proc;
+		ELSEIF @checker > 1 THEN
+			SELECT
+				NOW() AS datetime
+				, 409 AS code
+				, 'Conflict' AS status
+				, CONCAT('Product dengan id ', @product_id ,' duplikat!') AS message;
+			ROLLBACK;
+			LEAVE proc;			
+		END IF;
+		
+		SELECT COUNT(1) INTO @checker
+		FROM db_market.customer_order_detail
+		WHERE deleted_at IS NULL
+		AND customer_order_id = @new_customer_order_id
+		AND product_id = @product_id;
+	  	
+		IF @checker > 0 THEN
+			SELECT quantity
+			INTO @quantity
+			FROM db_market.customer_order_detail
+			WHERE deleted_at IS NULL
+			AND customer_order_id = @new_customer_order_id
+			AND product_id = @product_id;
+	   	
+			SET @new_quantity = @quantity + @qty;
+
+			UPDATE db_market.customer_order_detail
+			SET quantity = @new_quantity
+				, total_price = @price * @new_quantity
+			WHERE deleted_at IS NULL
+			AND customer_order_id = @new_customer_order_id
+			AND product_id = @product_id;
+		ELSE
+			INSERT INTO db_market.customer_order_detail
+			SET customer_order_id = @new_customer_order_id
+				, product_id = @product_id
+				, price = @price
+				, quantity = @qty
+				, total_price = @price * @qty
+				, created_at = @current_datetime
+				, updated_at = @current_datetime;
+		END IF;
+	  
+		SET @grand_total_price = @grand_total_price + (@price * @qty);
+		SET i = i + 1;
+	END WHILE;
+
+	UPDATE db_market.customer_order
+ 	SET grand_total_price = @grand_total_price
+ 	WHERE customer_order_id = @new_customer_order_id;
+
+ 	UPDATE db_market.products
+ 	SET stock = @stock - @new_quantity
+ 	WHERE product_id = @product_id;
+ 	
+	SELECT
+		NOW() AS datetime
+		, 200 AS code
+		, 'OK' AS status
+		, 'OK' AS message;
+
+	COMMIT;
+END //
 DELIMITER ;
 
 DELIMITER //
@@ -1173,15 +1353,16 @@ CREATE PROCEDURE IF NOT EXISTS db_market.CustomerOrderDeleteByCustomerOrderId(
 )
 proc:BEGIN
 	-- variabel
-	DECLARE v_checker INT DEFAULT 0;
 
 	-- code
-	SELECT COUNT(1) INTO v_checker
+	START TRANSACTION;
+	
+	SELECT COUNT(1) INTO @checker
 	FROM db_market.customer_order
 	WHERE deleted_at IS NULL
 	AND customer_order_id = _id;
 
-	IF v_checker < 1 THEN
+	IF @checker < 1 THEN
 		SELECT
 			NOW() AS datetime
 			, 404 AS code
