@@ -96,6 +96,23 @@ proc:BEGIN
 	-- variabel
 	DECLARE v_offset INT;
 	DECLARE v_total_data INT;
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 
 	-- code
 	START TRANSACTION;
@@ -160,6 +177,23 @@ CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetById(
 )
 proc:BEGIN
 	-- variabel
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 	
 	-- code
 	START TRANSACTION;
@@ -204,6 +238,23 @@ CREATE PROCEDURE IF NOT EXISTS db_market.ProductGetByName(
 	IN _name VARCHAR(45)
 )
 proc:BEGIN
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 	
 	-- code
 	START TRANSACTION;
@@ -254,6 +305,23 @@ proc:BEGIN
 	DECLARE v_offset INT;
 	DECLARE v_total_data INT;
 	DECLARE v_total_page INT;
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 	
 	-- code
 	START TRANSACTION;
@@ -324,6 +392,23 @@ proc:BEGIN
 	DECLARE v_offset INT;
 	DECLARE v_total_data INT;
 	DECLARE v_total_page INT;
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 	
 	-- code
 	START TRANSACTION;
@@ -385,6 +470,23 @@ CREATE PROCEDURE IF NOT EXISTS db_market.ProductAddOne(
 )
 proc:BEGIN
 	-- variabel	
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 	
 	-- code
 	START TRANSACTION;
@@ -435,6 +537,23 @@ CREATE PROCEDURE IF NOT EXISTS db_market.ProductAddStockById(
 proc:BEGIN
 	-- variabel
 	DECLARE v_stock INT;
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 	
 	-- code
 	START TRANSACTION;
@@ -493,6 +612,23 @@ proc:BEGIN
 	DECLARE v_name VARCHAR(45);
 	DECLARE v_price INT;
 	DECLARE v_description TEXT;
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 
 	-- code
 	START TRANSACTION;
@@ -563,6 +699,23 @@ CREATE PROCEDURE IF NOT EXISTS db_market.ProductDeleteOneById(
 )
 proc:BEGIN
 	-- variabel
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 
 	-- code
 	START TRANSACTION;
@@ -614,6 +767,23 @@ proc:BEGIN
 	-- variabel
 	DECLARE v_offset INT;
 	DECLARE v_total_data INT;
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 
 	-- code
 	START TRANSACTION;
@@ -678,6 +848,23 @@ CREATE PROCEDURE IF NOT EXISTS db_market.CustomerGetById(
 )
 proc:BEGIN
 	-- variabel
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 	
 	-- code
 	START TRANSACTION;
@@ -723,6 +910,23 @@ CREATE PROCEDURE IF NOT EXISTS db_market.CustomerGetByName(
 )
 proc:BEGIN
 	-- variabel
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 	
 	-- code
 	START TRANSACTION;
@@ -773,6 +977,23 @@ proc:BEGIN
 	DECLARE v_offset INT;
 	DECLARE v_total_data INT;
 	DECLARE v_total_page INT;
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 	
 	-- code
 	START TRANSACTION;
@@ -844,6 +1065,23 @@ proc:BEGIN
 	DECLARE v_offset INT;
 	DECLARE v_total_data INT;
 	DECLARE v_total_page INT;
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 	
 	-- code
 	START TRANSACTION;
@@ -922,6 +1160,24 @@ CREATE PROCEDURE IF NOT EXISTS db_market.CustomerAddOne(
 	, IN _is_member BOOLEAN
 )
 proc:BEGIN
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
+
 	-- code
 	START TRANSACTION;
 	
@@ -973,6 +1229,23 @@ proc:BEGIN
 	DECLARE v_address TEXT;
 	DECLARE v_is_member BOOLEAN;
 
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 	
 	-- code
 	START TRANSACTION;
@@ -1054,6 +1327,23 @@ CREATE PROCEDURE IF NOT EXISTS db_market.CustomerDeleteOneById(
 )
 proc:BEGIN
 	-- variabel
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 
 	-- code
 	START TRANSACTION;
@@ -1106,6 +1396,23 @@ proc:BEGIN
 	-- variabel
 	DECLARE v_offset INT;
 	DECLARE v_total_data INT;
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 
 	-- code
 	START TRANSACTION;
@@ -1198,14 +1505,14 @@ proc:BEGIN
 	DECLARE i INT UNSIGNED DEFAULT 0;
 	DECLARE v_count INT UNSIGNED DEFAULT JSON_LENGTH(_product_id_qty_arr_json);
 	DECLARE v_arr LONGTEXT DEFAULT NULL;
-	DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
 	DECLARE mysql_msg TEXT;
 
 	DECLARE exit handler FOR SQLEXCEPTION
 	BEGIN
 		GET DIAGNOSTICS CONDITION 1
-			mysql_code = RETURNED_SQLSTATE, mysql_msg = MESSAGE_TEXT;
-			-- SELECT "error", CONCAT( "Codigo de error: ",mysql_code, " mensaje_mysql: ",mysql_msg);
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
 			SELECT
 				NOW() AS datetime
 				, 500 AS code
@@ -1353,6 +1660,23 @@ CREATE PROCEDURE IF NOT EXISTS db_market.CustomerOrderDeleteByCustomerOrderId(
 )
 proc:BEGIN
 	-- variabel
+	-- DECLARE mysql_code CHAR(5) DEFAULT '00000';
+	DECLARE mysql_msg TEXT;
+
+	DECLARE exit handler FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1
+			-- mysql_code = RETURNED_SQLSTATE;
+			mysql_msg = MESSAGE_TEXT;
+			SELECT
+				NOW() AS datetime
+				, 500 AS code
+				, 'Internal Server Error' AS status
+				, mysql_msg AS message;
+			ROLLBACK;
+			RESIGNAL;
+		ROLLBACK;
+	END;
 
 	-- code
 	START TRANSACTION;
