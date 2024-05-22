@@ -29,14 +29,14 @@ CREATE TABLE IF NOT EXISTS db_market.customers(
 );
 
 CREATE TABLE IF NOT EXISTS db_market.customer_order(
-	customer_order_id INT NOT NULL
+	customer_order_id INT AUTO_INCREMENT UNIQUE NOT NULL
 	, customer_id INT NOT NULL
 	, grand_total_price INT NOT NULL
 	, created_at DATETIME NOT NULL
-  	, updated_at DATETIME NOT NULL
-  	, deleted_at DATETIME
-  	, PRIMARY KEY(customer_order_id)
-  	, FOREIGN KEY (customer_id) REFERENCES db_market.customers(customer_id)
+	, updated_at DATETIME NOT NULL
+	, deleted_at DATETIME
+	, PRIMARY KEY(customer_order_id)
+	, FOREIGN KEY (customer_id) REFERENCES db_market.customers(customer_id)
 );
 
 CREATE TABLE IF NOT EXISTS db_market.customer_order_detail(
@@ -47,11 +47,11 @@ CREATE TABLE IF NOT EXISTS db_market.customer_order_detail(
 	, quantity INT NOT NULL
 	, total_price INT NOT NULL
 	, created_at DATETIME NOT NULL
-  	, updated_at DATETIME NOT NULL
-  	, deleted_at DATETIME
-  	, PRIMARY KEY(customer_order_detail_id)
-  	, FOREIGN KEY (customer_order_id) REFERENCES db_market.customer_order(customer_order_id)
-  	, FOREIGN KEY (product_id) REFERENCES db_market.products(product_id)
+	, updated_at DATETIME NOT NULL
+	, deleted_at DATETIME
+	, PRIMARY KEY(customer_order_detail_id)
+	, FOREIGN KEY (customer_order_id) REFERENCES db_market.customer_order(customer_order_id)
+	, FOREIGN KEY (product_id) REFERENCES db_market.products(product_id)
 );
 
 -- Insert Data Sample
