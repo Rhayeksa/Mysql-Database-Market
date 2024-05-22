@@ -78,7 +78,7 @@ VALUES
 
 INSERT INTO db_market.customer_order_detail(customer_order_detail_id, customer_order_id, product_id, price, quantity, total_price, created_at, updated_at)
 VALUES
-	(1, 1, 1, 3000, 30, 9000, NOW(), NOW())
+	(1, 1, 1, 3000, 30, 90000, NOW(), NOW())
 	, (2, 1, 2, 8000, 20, 160000, NOW(), NOW())
 	, (3, 2, 3, 5000, 10, 50000, NOW(), NOW())
 	, (4, 3, 2, 8000, 10, 80000, NOW(), NOW())
